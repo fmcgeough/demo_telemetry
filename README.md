@@ -186,3 +186,16 @@ them in your metrics.
 iex> Repo.all(User, telemetry_options: %{name: "all_users"})
 
 ![Query Id](guides/query_id.png)
+
+## Telemetry Event
+
+Another option available is to use `:telemetry_event` when the database operation is done.
+Personally I've never used this but it is available. This changes the event name. For example,
+
+```
+iex> Repo.all(User, telemetry_event: [:demo_telemetry, :test_telemetry_event])
+```
+
+The generated event name will be: `[:demo_telemetry, :test_telemetry_event, :query]`.
+
+![Telemetry Event](guides/telemetry_event.png)

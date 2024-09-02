@@ -9,7 +9,8 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
   @primary_db_metrics [:demo_telemetry, :primary, :query]
   @replica_db_metrics [:demo_telemetry, :replica, :query]
   @other_metrics [:demo_telemetry, :database, :other_repo, :query]
-  @events [@primary_db_metrics, @replica_db_metrics, @other_metrics]
+  @telemetry_event [:demo_telemetry, :test_telemetry_event]
+  @events [@primary_db_metrics, @replica_db_metrics, @other_metrics, @telemetry_event]
 
   @telemetry_handling_error "Exception thrown when handling error"
   @unhandled_event "Unhandled event name received"
@@ -41,6 +42,10 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
 
   defp do_handle_event(@other_metrics, measurements, metadata, _config) do
     output_db_event_data("OTHER DATABASE, event: #{inspect(@other_metrics)}", measurements, metadata)
+  end
+
+  defp do_handle_event(@telemetry_event, measurements, metadata, _config) do
+    output_db_event_data("TELEMETRY EVENT, event: #{inspect(@telemetry_event)}", measurements, metadata)
   end
 
   defp do_handle_event(name, _, _, _) do
