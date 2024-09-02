@@ -192,7 +192,9 @@ iex> Repo.all(User, telemetry_options: %{name: "all_users"})
 Another option available is to use `:telemetry_event` when the database operation is done.
 Personally I've never used this but it is available. This changes the event name. That
 means that if you want to receive the event you must include the name in the list of
-events you're listening for in call to `:telemetry.attach_many`. For example,
+events you're listening for in call to `:telemetry.attach_many`.
+
+Here's an example using `:telemetry_event`.
 
 ```
 iex> Repo.all(User, telemetry_event: [:demo_telemetry, :test_telemetry_event])
