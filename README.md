@@ -158,7 +158,7 @@ iex> DemoTelemetry.Database.OtherRepo.all(User)
 ```
 ![Other](guides/other.png)
 
-## Multi Tests
+## Transactions and Ecto.Multi
 
 ```
 iex> alias Ecto.Multi
