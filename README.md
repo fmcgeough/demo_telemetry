@@ -3,6 +3,11 @@
 This is a github repo I setup to demonstrate telemetry event generation for the
 [Elixir](https://elixir-lang.org/) language's [ecto library](https://hexdocs.pm/ecto/Ecto.html).
 
+Note: this demonstrates a number of aspects of Ecto Telemetry. It's fine to submit a PR for this
+repo if you want to add to what is demonstrated (or fix some problem).
+
+## Events in Elixir
+
 Events are generated in Elixir using the [telemetry](https://hexdocs.pm/telemetry/readme.html)
 library. As explained in the telemetry doc:
 
