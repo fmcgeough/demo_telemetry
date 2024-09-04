@@ -22,6 +22,6 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
     steps:
-      uses: mtrudel/elixir-ci-actions/.github/workflows/test.yml@main
+      - uses: mtrudel/elixir-ci-actions/.github/workflows/test.yml@main
   lint:
     uses: mtrudel/elixir-ci-actions/.github/workflows/lint.yml@main
