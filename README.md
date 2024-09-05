@@ -12,8 +12,8 @@ See the blog post [Ecto Telemetry](https://fmcgeough.github.io/blog/2024/ecto-te
 
 The code in this app demonstrates some features of ecto telemetry that you should
 be aware of. You can try out these features in iex. You need to have a Postgresql
-test instance that the code can connect to. You will want to modify the connection
-information in the `config/config.exs` file. Here are steps to get going:
+test instance that the code can connect to. Examine the `config/config.exs` file to
+see if you want to adjust the user / password. Here are steps to get going:
 
 ```
 $ git clone https://github.com/fmcgeough/demo_telemetry
