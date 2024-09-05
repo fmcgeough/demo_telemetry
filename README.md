@@ -118,6 +118,7 @@ is generated. The code path for an event is:
 generate event -> telemetry library
                   for each handler for event
                             -> call the handler function
+```
 
 ## How and When are Telemetry Events Generated in Ecto?
 
