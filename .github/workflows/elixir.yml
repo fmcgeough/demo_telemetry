@@ -6,22 +6,25 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+
     services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
+      db:
         image: postgres
-        # Set health checks to wait until postgres has started
+        ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
+
     steps:
-      - uses: mtrudel/elixir-ci-actions/.github/workflows/test.yml@main
+      - uses: actions/checkout@v1.0.0
+      - uses: actions/setup-elixir@v1.0.0
+        with:
+          otp-version: 22.x
+          elixir-version: 1.9.x
+      - run: mix deps.get
+      - run: mix test
   lint:
     uses: mtrudel/elixir-ci-actions/.github/workflows/lint.yml@main
