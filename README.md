@@ -18,10 +18,7 @@ information in the `config/config.exs` file. Here are steps to get going:
 ```
 $ git clone https://github.com/fmcgeough/demo_telemetry
 $ cd demo_telemetry
-$ mix deps.get
-$ mix ecto.create
-$ mix ecto.migrate
-$ iex -S mix
+$ mix deps.get && mix ecto.create --quiet && mix ecto.migrate --quiet && iex -S mix
 ```
 
 You can follow along after that with the sections below.
