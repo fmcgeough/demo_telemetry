@@ -6,7 +6,7 @@ This is a github repo I setup to demonstrate telemetry event generation for the
 Note: this demonstrates a number of aspects of Ecto Telemetry. It's fine to submit a PR for this
 repo if you want to add to what is demonstrated (or fix some problem).
 
-See the blog post [Ecto Telemetry](https://fmcgeough.github.io/blog/2024/ecto-telemetry/) more more information.
+See the blog post [Ecto Telemetry](https://fmcgeough.github.io/blog/2024/ecto-telemetry/) for more information.
 
 ## Demonstrating Ecto Telemetry
 
