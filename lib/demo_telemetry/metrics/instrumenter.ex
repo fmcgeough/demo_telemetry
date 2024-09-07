@@ -6,6 +6,7 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
 
   require Logger
 
+  @transaction_queries ["begin", "commit", "rollback"]
   @primary_db_metrics [:demo_telemetry, :primary, :query]
   @replica_db_metrics [:demo_telemetry, :replica, :query]
   @other_metrics [:demo_telemetry, :database, :other_repo, :query]
@@ -32,6 +33,26 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
       Logger.warning("#{@telemetry_handling_error}. #{inspect(e)}")
   end
 
+  @doc """
+  Look at the telemetry metadata and extract the Ecto event name (if present)
+  or return nil
+
+  This handles the transaction related operations (which cannot be named by the
+  app).
+  """
+  @spec ecto_event_name(map()) :: String.t() | nil
+  def ecto_event_name(metadata) when is_map(metadata) do
+    metadata
+    |> get_in([:options, :name])
+    |> case do
+      nil -> ecto_transaction_name(metadata[:query])
+      val -> val
+    end
+  end
+
+  defp ecto_transaction_name(name) when name in @transaction_queries, do: name
+  defp ecto_transaction_name(_), do: nil
+
   defp do_handle_event(@primary_db_metrics, measurements, metadata, _config) do
     output_db_event_data("PRIMARY DATABASE, event: #{inspect(@primary_db_metrics)}", measurements, metadata)
   end
@@ -52,32 +73,34 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
     Logger.warning("#{@unhandled_event}, #{inspect(name)}")
   end
 
-  defp output_db_event_data(which_db, measurements, metadata) do
-    measurements_info = analyze_db_measurements(measurements)
-    metadata_info = analyze_db_metadata(metadata)
+  def output_db_event_data(which_db, measurements, metadata) do
+    if log_telemetry_info() do
+      measurements_info = analyze_db_measurements(measurements)
+      metadata_info = analyze_db_metadata(metadata)
 
-    write_info("#{which_db}", underline: true)
-    write_info("MEASUREMENTS", underline: true, column: 5)
+      write_info("#{which_db}", underline: true)
+      write_info("MEASUREMENTS", underline: true, column: 5)
 
-    Enum.each(measurements_info, fn {k, v} ->
-      write_info("* #{k}: #{inspect(v)}", column: 5, color: :light_cyan)
-    end)
+      Enum.each(measurements_info, fn {k, v} ->
+        write_info("* #{k}: #{inspect(v)}", column: 5, color: :light_cyan)
+      end)
 
-    write_info("METADATA", underline: true, column: 5)
+      write_info("METADATA", underline: true, column: 5)
 
-    Enum.each(metadata_info, fn {k, v} ->
-      write_info("* #{k}: #{inspect(v)}", column: 5, color: :light_cyan)
-    end)
+      Enum.each(metadata_info, fn {k, v} ->
+        write_info("* #{k}: #{inspect(v)}", column: 5, color: :light_cyan)
+      end)
+    end
   end
 
-  defp analyze_db_measurements(measurements) do
+  def analyze_db_measurements(measurements) do
     Enum.map(measurements, fn {key, val} ->
       microseconds = System.convert_time_unit(val, :native, :microsecond)
       {key, "#{microseconds}μs"}
     end)
   end
 
-  defp analyze_db_metadata(metadata) do
+  def analyze_db_metadata(metadata) do
     Map.to_list(metadata)
   end
 
@@ -108,5 +131,9 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
 
   defp write_text(color, text) do
     [color, text] |> IO.ANSI.format() |> IO.puts()
+  end
+
+  defp log_telemetry_info do
+    Application.get_env(:demo_telemetry, :log_telemetry_info, true)
   end
 end

@@ -5,9 +5,6 @@ defmodule DemoTelemetry.Factory do
   # with Ecto
   use ExMachina.Ecto, repo: DemoTelemetry.Database.Repo
 
-  # without Ecto
-  use ExMachina
-
   alias DemoTelemetry.Database.Schema.User
 
   def user_factory do
