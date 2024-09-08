@@ -7,7 +7,7 @@ defmodule DemoTelemetry.Factory do
 
   alias DemoTelemetry.Database.Schema.User
 
-  def user_factory do
-    %User{name: Faker.Person.name()}
+  def user_factory(attrs) do
+    %User{name: Faker.Person.name()} |> merge_attributes(attrs)
   end
 end

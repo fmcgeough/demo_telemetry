@@ -126,3 +126,32 @@ name (if present) from the metadata. This allows the unit test to ensure that th
 The TelemetryTestHelper module automatically detaches the event handler when the test completes. This
 is very important. If no detach is done then the event will continue to generate and send messages
 when a different unit test is running.
+
+## Ex_machina and Ecto Telemetry Events
+
+The [ex_machina](https://hexdocs.pm/ex_machina/readme.html) library provides the ability to generate
+unit test data for the database. The unit test ends up calling an insert function provided by
+ex_machina. Thankfully, the library provides a 3 argument insert where the last parameter are the
+options passed to the Repo insert. This lets you pass in a name that can be differentiated from
+the production code.
+
+The reason that this is important is that if you are naming your db interactions (and you should
+really do this) then you probably want to make sure that every interaction is named properly. However,
+that means that you want to make sure that ex_machina isn't causing problems with any code you
+write to validate that every db interaction is named. The easiest way to do this is to use the
+`insert/3` function and pass in `:telemetry_options` to it. For example:
+
+```
+  describe "ex_machina test" do
+    test "ensure ecto telemetry events allow naming db interactions with ex_machina", %{test: test} do
+      attach(@primary_repo_event, test)
+
+      # Call ex_machina's insert/3 function and name this db interaction "ex_machina"
+      insert(:user, %{}, telemetry_options: %{name: "ex_machina"})
+
+      assert_receive({:telemetry_event, data})
+      assert %{event_name: @primary_repo_event, measurements: _, metadata: metadata} = data
+      assert "ex_machina" == ecto_event_name(metadata)
+    end
+  end
+```
