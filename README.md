@@ -32,8 +32,8 @@ have its own events defined so check its documentation_).
   metrics surrounding the app's interaction with the database. By capturing this data the developer
   can graph what queries are executing the most, which are the slowest queries, and other useful
   information. This is described in the Ecto documentation as an "Adapter Specific Event". This
-  somewhat awkward naming is not that important. I'll refer to it in this doc as a "Database
-  Activity Event".
+  somewhat awkward naming is not that important. But I'll refer to it in this doc as a "Database
+  Activity" event.
 
 ## Database Activity Event
 
