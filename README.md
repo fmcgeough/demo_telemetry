@@ -12,7 +12,7 @@ See the blog post [Ecto Telemetry](https://fmcgeough.github.io/blog/2024/ecto-te
 
 Ecto is the library that Elixir developers use to interact with a relational database. Different
 databases implement behaviour that allows Ecto to interact with different databases without having
-all the code inside the ecto library itself. So, for example, there is a
+all the code inside Ecto itself. So, for example, there is a
 [postgrex](https://hexdocs.pm/postgrex/readme.html) library for Postgresql and a
 [myxql](https://hexdocs.pm/myxql/readme.html) library for MySQL.
 
