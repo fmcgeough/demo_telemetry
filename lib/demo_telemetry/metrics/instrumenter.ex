@@ -1,6 +1,14 @@
 defmodule DemoTelemetry.Metrics.Instrumenter do
   @moduledoc """
   Attach to telemetry events of interest
+
+  The call that the telemetry system makes to pass us events is `handle_event/4`. Notice
+  in the code that this function simply calls `do_handle_event/4`. Pattern matching to
+  handle different events is there.
+
+  The `handle_event/4` function rescues exceptions that might happen in the handling code.
+  If an exception is raised when the telemetry system calls your handler then your hook
+  to telemetry is removed and you will receive no more events.
   """
   use GenServer
 
@@ -26,6 +34,12 @@ defmodule DemoTelemetry.Metrics.Instrumenter do
     {:ok, state}
   end
 
+  @doc """
+  Telemetry callback function to handle events
+
+  This function is only called if an event matches one of the events that are listed in the call to
+  `:telemetry.attach_many/4`.
+  """
   def handle_event(event_name, measurements, metadata, config) do
     do_handle_event(event_name, measurements, metadata, config)
   rescue
